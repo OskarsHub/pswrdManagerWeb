@@ -1,34 +1,17 @@
-import React from "react";
+import axios from 'axios'
+import React, { useState} from "react";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => { 
 
-  /**
-   * Login method.
-   */
-  const login = () => {
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
+  const [data, setData] = useState({})
 
-    document.getElementById('username').value = "";
-    document.getElementById('password').value = "";
-
-    // isValid = checkUser()
-    if (username == "Testaaja" && password == "salasana"){
-      var isValid = true
-    }
-    else{
-      var isValid = false
-    }
-    
-    if (isValid) {
-      changePage("/afterLogin")
-    }
-    else{
-      alert("wrong username or password")
-    }
+  const updateData = e => {
+    setData({
+        ...data,
+        [e.target.name]: e.target.value
+    })
   }
-
 
   /**
    * Changes do different page.
@@ -39,20 +22,47 @@ const LoginPage = () => { 
       let path = page;
       navigate(path);
   }
+  
+  /**
+   * Login method, that checks from backend if user exixst and tries input password to password found in database
+   */
+  const login = (e) => {
+    e.preventDefault()
+
+    axios.get('http://localhost:3001/api/login/'+data.username)
+
+    .then(res => {
+      const response = res.data;
+      if (response == null) {
+        //If no username is found 
+        alert("Incorrect username or password")
+      }
+      if (response.password == data.password) {
+        //Username and password matches to database
+        alert("Correct. Sadly the next page is under construction :(")
+      }
+      else {
+        //Wrong password
+        alert("Incorrect username or password")
+      }
+    })
+    }
 
 
   return (
   <div>
   <h1>Login</h1>
-  <div>      
-    <label htmlFor="username">Username:</label>
-    <input type="text" id="username" name="username" placeholder="Enter your username"></input>
-  </div>
-  <div>      
-    <label htmlFor="password">Password:</label>
-    <input type="password" id="password" name="password" placeholder="Enter your password"></input>
-  </div>
-  <input type="button" value="Login" onClick={login}></input>
+  <form onSubmit={login}>
+    <div>      
+      <label htmlFor="username"/>Username:
+      <input type="text" name="username" onChange={updateData} placeholder="Enter your username"/>
+    </div>
+    <div>      
+      <label htmlFor="password"/>Password:
+      <input type="password" name="password" onChange={updateData} placeholder="Enter your password"/>
+    </div>
+    <input type="submit" value="Login"></input>
+  </form>
   <button onClick={ () => {changePage("/")} }>Cancel</button>
   </div>
   );

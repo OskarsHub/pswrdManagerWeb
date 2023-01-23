@@ -16,7 +16,7 @@ const HomePage = () => {
     return (
     <div>
       <div>
-      <h1>Wlecome to pswrManager Web-edition!</h1>
+      <h1>Welcome to pswrdManager Web-edition!</h1>
       </div>
       <div>
         <form>

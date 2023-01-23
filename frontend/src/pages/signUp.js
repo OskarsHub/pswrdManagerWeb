@@ -1,3 +1,4 @@
+import axios, { AxiosHeaders } from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
   
@@ -6,22 +7,42 @@ const SignUpPage = () => {
     /**
      * Signup method.
      */
-    const signup = () => {
+    const signup = (e ) => {
+      e.preventDefault()
       var username = document.getElementById("username").value;
       var password = document.getElementById("password").value;
       var passwordAgain = document.getElementById("passwordAgain").value;
 
       /**
-       * Tries if the passwords are same.
+       * Tries if the passwords are same. If true, then checks from backend if username is reserve and if not,
+       * then makes new user to database
        */
       if (password == passwordAgain) {
-        console.log("Making new account")
-      }
-      else {
+        const formdata = new FormData();
+        formdata.append(username, password)
+
+        axios.get('http://localhost:3001/api/signup', { 
+          params: {
+            username: username, 
+            password: password,
+          }
+        })
+        .then(res => {
+          const response = res.data;
+          if(response.name == 'error'){
+            //If username is reserved
+            alert('Username is taken')
+          }else{
+            //New user added
+            alert('New user made')
+          }
+      })
+      }else {
+        //if password and passwordAgain doesn't match
         console.log("Passwords don't match")
       }
-
     }
+    
 
     /**
     * Changes do different page.
@@ -35,7 +56,10 @@ const SignUpPage = () => {
 
     return (
       <div>
-      <h1>Signup</h1>
+      <h1>Sign up</h1>
+      <div>
+        <h2>WARNING! passwords are not yet hashed when stored in database. Please don't use your right passwords for now.</h2>
+      </div>
       <div>      
         <label htmlFor="username">Username:</label>
         <input type="text" id="username" name="username" placeholder="Enter your username"></input>
