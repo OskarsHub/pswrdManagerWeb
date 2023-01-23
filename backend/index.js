@@ -3,13 +3,15 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const { Client } = require('pg')
+const bcrypt = require('bcrypt')
 
 app.use(express.static('build'))
+app.use(express.json());
 app.use(cors())
 
-app.get('/api/login/:username', (request, response) => {
+app.post('/api/login', (request, response) => {
 
-    console.log(request.username)
+    const {username, password} = request.body;
 
     const client = new Client({
         host: process.env.HOST,
@@ -18,8 +20,6 @@ app.get('/api/login/:username', (request, response) => {
         password: process.env.PASSWORD,
         database: process.env.DATABASE
     })
-
-    const username = request.params.username
 
     let command = (`select * from "${username}"`)
 
@@ -29,21 +29,30 @@ app.get('/api/login/:username', (request, response) => {
      * then responses with null
      */
     client.connect();
-    client.query(command, (err, result) => {
+    client.query(command, async (err, result) => {
     if(!err) {
-        response.send(result.rows[0]);
+        hashPassword = (result.rows[0].password);
+        if(await bcrypt.compare(password, hashPassword)) {
+            response.send(true)
+        }else{
+            response.send(false)
+        }
     }else{
-    response.send(null)
+        response.send(false)
     }
     client.end();
     })
     
 })
 
-app.get('/api/signup', (request, response) => {
+app.post('/api/signup', async (request, response) => {
 
-    const username = request.query.username;
-    const password = request.query.password;
+    const {username, password} = request.body;
+    const hashedPassword = await bcrypt.hash(password, 10); 
+
+    console.log(username)
+    console.log(password)
+    console.log(hashedPassword)
 
     const client = new Client({
         host: process.env.HOST,
@@ -53,8 +62,8 @@ app.get('/api/signup', (request, response) => {
         database: process.env.DATABASE
     })
 
-    const createCommand = (`CREATE TABLE "${username}" (id serial PRIMARY KEY, service VARCHAR (50),username VARCHAR ( 50 ) NOT NULL, password VARCHAR ( 50 ) NOT NULL);`)
-    const insertCommand = (`INSERT INTO "${username}" (id, service, username, password) VALUES (DEFAULT, 'DB', '${username}', '${password}');`)
+    const createCommand = (`CREATE TABLE "${username}" (id serial PRIMARY KEY, service VARCHAR (50),username VARCHAR ( 50 ) NOT NULL, password VARCHAR ( 60 ) NOT NULL);`)
+    const insertCommand = (`INSERT INTO "${username}" (id, service, username, password) VALUES (DEFAULT, 'DB', '${username}', '${hashedPassword}');`)
 
     /**
      * Connects to database and tires if username is reserved. If not, then adds new user to database
@@ -63,15 +72,14 @@ app.get('/api/signup', (request, response) => {
     client.query(createCommand, (err) => {
     if(err) {
         console.log("Username is reserved")
-        response.send(err)
-        return
+        response.end('42P07')
     }
     client.query(insertCommand, (err, result) => {
         if(!err) {
             console.log("User added")
-            response.send(result)
+            response.end()
         }else{
-            response.send(err) 
+            response.end() 
         }
         client.end();
     })

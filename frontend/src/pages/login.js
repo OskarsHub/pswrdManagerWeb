@@ -24,26 +24,24 @@ const LoginPage = () => { 
   }
   
   /**
-   * Login method, that checks from backend if user exixst and tries input password to password found in database
+   * Login method, that checks from backend if user exist. If true, then (in next update) allow to go afterLoginPage 
    */
   const login = (e) => {
     e.preventDefault()
 
-    axios.get('http://localhost:3001/api/login/'+data.username)
-
+    axios.post('http://localhost:3001/api/login', {
+      username: data.username, 
+      password: data.password
+    })
     .then(res => {
       const response = res.data;
-      if (response == null) {
+      if (response == false) {
         //If no username is found 
         alert("Incorrect username or password")
       }
-      if (response.password == data.password) {
+      else if (response == true) {
         //Username and password matches to database
         alert("Correct. Sadly the next page is under construction :(")
-      }
-      else {
-        //Wrong password
-        alert("Incorrect username or password")
       }
     })
     }

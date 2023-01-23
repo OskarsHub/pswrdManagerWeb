@@ -21,15 +21,13 @@ const SignUpPage = () => {
         const formdata = new FormData();
         formdata.append(username, password)
 
-        axios.get('http://localhost:3001/api/signup', { 
-          params: {
+        axios.post('http://localhost:3001/api/signup', { 
             username: username, 
-            password: password,
-          }
+            password: password
         })
         .then(res => {
           const response = res.data;
-          if(response.name == 'error'){
+          if(response == '42P07'){
             //If username is reserved
             alert('Username is taken')
           }else{
@@ -57,9 +55,6 @@ const SignUpPage = () => {
     return (
       <div>
       <h1>Sign up</h1>
-      <div>
-        <h2>WARNING! passwords are not yet hashed when stored in database. Please don't use your right passwords for now.</h2>
-      </div>
       <div>      
         <label htmlFor="username">Username:</label>
         <input type="text" id="username" name="username" placeholder="Enter your username"></input>
