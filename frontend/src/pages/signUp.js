@@ -1,6 +1,7 @@
-import axios, { AxiosHeaders } from "axios";
+import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./signUp.css"
   
 const SignUpPage = () => {
 
@@ -11,33 +12,38 @@ const SignUpPage = () => {
       e.preventDefault()
       var username = document.getElementById("username").value;
       var password = document.getElementById("password").value;
-      var passwordAgain = document.getElementById("passwordAgain").value;
+      var passwordAgain = document.getElementById("password-again").value;
+
+      if (!username|| !password|| !passwordAgain) {
+        alert("You must fill everything")
+        return
+      }
 
       /**
        * Tries if the passwords are same. If true, then checks from backend if username is reserve and if not,
        * then makes new user to database
        */
-      if (password == passwordAgain) {
-        const formdata = new FormData();
-        formdata.append(username, password)
+      if (password === passwordAgain) {
 
-        axios.post('http://localhost:3001/api/signup', { 
+        console.log("ennen pyyntöä")
+        axios.post('https://localhost:3001/api/signup', { 
             username: username, 
             password: password
         })
         .then(res => {
           const response = res.data;
-          if(response == '42P07'){
+          if(response === '42P07'){
             //If username is reserved
-            alert('Username is taken')
+            alert('Username is already taken')
           }else{
             //New user added
-            alert('New user made')
+            alert("New user made")
+            changePage("/")
           }
       })
       }else {
         //if password and passwordAgain doesn't match
-        console.log("Passwords don't match")
+        alert("Passwords don't match")
       }
     }
     
@@ -52,25 +58,24 @@ const SignUpPage = () => {
         navigate(path);
     }
 
-    return (
-      <div>
-      <h1>Sign up</h1>
-      <div>      
-        <label htmlFor="username">Username:</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username"></input>
+  return (
+  <div class="signup-container">
+    <h1>Sign Up</h1>
+      <label htmlFor="username">Username:</label>
+      <input type="text" id="username" placeholder="Enter your username"/>
+      <br/>
+      <label htmlFor="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter your password"/>
+      <br/>
+      <label htmlFor="password-again">Password Again:</label>
+      <input type="password" id="password-again" placeholder="Enter your password again"/>
+      <br/>
+      <div className="button-row">
+      <button type="button" onClick={signup}>Sign Up</button>
+      <button type="button" onClick={ () => {changePage("/")} }>Cancel</button>
       </div>
-      <div>      
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password"></input> 
-      </div>
-      <div>      
-        <label htmlFor="passwordAgain">Password again:</label>
-        <input type="password" id="passwordAgain" name="passwordAgain" placeholder="Password again"></input>
-      </div>
-      <input type="button" value="Signup" onClick={signup}></input>
-      <button onClick={ () => {changePage("/login")} }>Already got account?</button>
-      <button onClick={ () => {changePage("/")} }>Cancel</button>
-      </div>
+      <button type="button" onClick={ () => {changePage("/login")} }>Already have an account?</button>
+  </div>
   );
 };
   

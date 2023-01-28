@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .password-manager-container {
+    width: 60%;
+    margin: 0 auto;
+  }
+
+  li {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px;
+  }
+  
+  h1 {
+    margin-bottom: 1px;
+    text-align: center;
+  }
+
+  h2 {
+    margin-top: 1px;
+    text-align: center;
+  }
+  
+  .password-list {
+    margin-top: 30px;
+  }
+  
+  .password-list ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+  }
+  
+  .password-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f2f2f2;
+    border-radius: 20px;
+  }
+  
+  .add-password-container {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .button-container button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #ccc;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .button-container button:hover {
+    background-color: #e6e6e6;
+  }

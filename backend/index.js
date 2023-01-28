@@ -1,14 +1,21 @@
 require('dotenv').config()
+const jwt = require('jsonwebtoken')
 const express = require('express')
 const app = express()
 const cors = require('cors')
 const { Client } = require('pg')
 const bcrypt = require('bcrypt')
+const encrypt = require('./controllers/encryption')
+const decrypt = require('./controllers/encryption')
 
-app.use(express.static('build'))
 app.use(express.json());
-app.use(cors())
+app.use(cors({
+    origin: 'https://localhost:3000'
+}))
 
+/**
+ * Login
+ */
 app.post('/api/login', (request, response) => {
 
     const {username, password} = request.body;
@@ -33,7 +40,21 @@ app.post('/api/login', (request, response) => {
     if(!err) {
         hashPassword = (result.rows[0].password);
         if(await bcrypt.compare(password, hashPassword)) {
-            response.send(true)
+
+            const userForToken = {
+                username: username,
+            }
+
+            /**
+             * Creates authToken to user that experies in 5 minutes
+             */
+            const Token = jwt.sign(
+                userForToken,
+                process.env.ACCESS_TOKEN_PRIVATE_KEY,
+                { expiresIn: '5min' }
+                )
+
+            response.send({Token})
         }else{
             response.send(false)
         }
@@ -45,7 +66,12 @@ app.post('/api/login', (request, response) => {
     
 })
 
+/**
+ * Signin up
+ */
 app.post('/api/signup', async (request, response) => {
+
+    console.log("pyyntö toimii")
 
     const {username, password} = request.body;
     const hashedPassword = await bcrypt.hash(password, 10); 
@@ -62,7 +88,7 @@ app.post('/api/signup', async (request, response) => {
         database: process.env.DATABASE
     })
 
-    const createCommand = (`CREATE TABLE "${username}" (id serial PRIMARY KEY, service VARCHAR (50),username VARCHAR ( 50 ) NOT NULL, password VARCHAR ( 60 ) NOT NULL);`)
+    const createCommand = (`CREATE TABLE "${username}" (id serial PRIMARY KEY, service VARCHAR (50),username VARCHAR ( 50 ) NOT NULL, password VARCHAR ( 60 ) NOT NULL, iv VARCHAR (32));`)
     const insertCommand = (`INSERT INTO "${username}" (id, service, username, password) VALUES (DEFAULT, 'DB', '${username}', '${hashedPassword}');`)
 
     /**
@@ -77,12 +103,110 @@ app.post('/api/signup', async (request, response) => {
     client.query(insertCommand, (err, result) => {
         if(!err) {
             console.log("User added")
-            response.end()
+            response.send()
         }else{
-            response.end() 
+            response.send() 
         }
-        client.end();
     })
+    client.end();
+    })
+})
+
+/**
+ * Get users passwords
+ */
+app.get('/api/user', (request, response) => {
+
+    const {masterUser} = request.query
+    console.log(masterUser)
+
+    const client = new Client({
+        host: process.env.HOST,
+        port: process.env.DBPORT,
+        user: process.env.USER,
+        password: process.env.PASSWORD,
+        database: process.env.DATABASE
+    })
+
+    const command = (`SELECT * FROM "${masterUser}" WHERE id > 1;`)
+
+    client.connect();
+    client.query(command, (err, result) => {
+    if(err) {
+        console.log(err)
+        console.log("Error")
+        response.send('cannot get')
+    }else{
+        let databasePasswords = result.rows
+        let userPasswords = new Array(result.rowCount);
+
+        /**
+         * Goes trough data from database and decrypts passwords
+         */
+        for (let i = 0; i < userPasswords.length; i++) {
+            const ePassword = result.rows[i].password
+            const iv = result.rows[i].iv
+
+            password = decrypt.decrypt(ePassword, iv)
+
+            userPasswords[i] = {
+                id: i, 
+                service: databasePasswords[i].service,
+                username: databasePasswords[i].username,
+                password: password
+            }
+        }
+        response.send(userPasswords)
+
+    }
+    client.end();
+    })
+})
+
+/**
+ * Saving new password to database
+ */
+app.post('/api/user', (request, response) => {
+    const authToken = request.headers.authorization;
+
+    /**
+     * Tries if users authToken is still valid
+     */
+    try{
+    const auth = jwt.verify(authToken, process.env.ACCESS_TOKEN_PRIVATE_KEY)
+    }catch{
+        //If authToken has experied, then send logout request
+        response.send('logout')
+        return
+    }
+
+    const {masterUser, service, username, password} = request.body;
+
+    //encrypt password for database
+    ePassword = encrypt.encrypt(password)
+
+    const client = new Client({
+        host: process.env.HOST,
+        port: process.env.DBPORT,
+        user: process.env.USER,
+        password: process.env.PASSWORD,
+        database: process.env.DATABASE
+    })
+
+    const command = (`INSERT INTO "${masterUser}" (id, service, username, password, iv) VALUES (DEFAULT, '${service}', '${username}', '${ePassword.encryptedData}', '${ePassword.iv}');`)
+
+    console.log(command)
+
+    client.connect();
+    client.query(command, (err) => {
+    if(err) {
+        console.log("Error")
+        response.send('cannot add')
+    }else{
+        console.log("correct")
+        response.send("added")
+    }
+    client.end();
     })
 
 })

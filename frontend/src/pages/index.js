@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./index.css"
   
 const HomePage = () => {
 
@@ -14,17 +15,16 @@ const HomePage = () => {
     }
 
     return (
-    <div>
-      <div>
-      <h1>Welcome to pswrdManager Web-edition!</h1>
-      </div>
-      <div>
-        <form>
-          <button onClick={ () => {changePage("/login")} }>Login</button>
-          <button onClick={ () => {changePage("/signup")} }>Signup</button>
-        </form>
+    <div className="board">
+      <div className="welcome-container">
+        <h1>Welcome to Password Manager Web-edition</h1>
+        <div class="buttons-container">
+          <button type="button" onClick={ () => {changePage("/login")} }>Login</button>
+          <button type="button" onClick={ () => {changePage("/signup")} }>Sign Up</button>
+        </div>
       </div>
     </div>
+
     );
 };
   

@@ -1,17 +1,9 @@
-import axios from 'axios'
-import React, { useState} from "react";
+import React, { useContext} from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext from '../context/AuthContext';
+import "./login.css"
 
 const LoginPage = () => { 
-
-  const [data, setData] = useState({})
-
-  const updateData = e => {
-    setData({
-        ...data,
-        [e.target.name]: e.target.value
-    })
-  }
 
   /**
    * Changes do different page.
@@ -26,43 +18,22 @@ const LoginPage = () => { 
   /**
    * Login method, that checks from backend if user exist. If true, then (in next update) allow to go afterLoginPage 
    */
-  const login = (e) => {
-    e.preventDefault()
-
-    axios.post('http://localhost:3001/api/login', {
-      username: data.username, 
-      password: data.password
-    })
-    .then(res => {
-      const response = res.data;
-      if (response == false) {
-        //If no username is found 
-        alert("Incorrect username or password")
-      }
-      else if (response == true) {
-        //Username and password matches to database
-        alert("Correct. Sadly the next page is under construction :(")
-      }
-    })
-    }
-
+  let{loginUser} = useContext(AuthContext)
 
   return (
-  <div>
-  <h1>Login</h1>
-  <form onSubmit={login}>
-    <div>      
-      <label htmlFor="username"/>Username:
-      <input type="text" name="username" onChange={updateData} placeholder="Enter your username"/>
+    <div className="login-container">
+      <h1>Login</h1>
+      <form onSubmit={loginUser}>
+        <label htmlFor="username">Username:</label>
+        <input type="text" id="username" placeholder="Enter your username"/>
+        <br/>
+        <label htmlFor="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter your password"/>
+        <br/>
+        <button type="submit">Login</button>
+        <button onClick={ () => {changePage("/")} }>Cancel</button>
+      </form>
     </div>
-    <div>      
-      <label htmlFor="password"/>Password:
-      <input type="password" name="password" onChange={updateData} placeholder="Enter your password"/>
-    </div>
-    <input type="submit" value="Login"></input>
-  </form>
-  <button onClick={ () => {changePage("/")} }>Cancel</button>
-  </div>
   );
 };
   
