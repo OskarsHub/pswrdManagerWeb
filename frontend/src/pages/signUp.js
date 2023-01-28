@@ -25,8 +25,7 @@ const SignUpPage = () => {
        */
       if (password === passwordAgain) {
 
-        console.log("ennen pyyntöä")
-        axios.post('https://localhost:3001/api/signup', { 
+        axios.post('https://pswrdmanagerwebbackend.fly.dev/api/signup', { 
             username: username, 
             password: password
         })

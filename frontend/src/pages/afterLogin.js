@@ -16,7 +16,7 @@ const AfterLoginPage = () => {
      * Get's users data from database when page is reloaded
      */
     useEffect(() => {
-      axios.get('http://localhost:3001/api/user', {
+      axios.get('https://pswrdmanagerwebbackend.fly.dev/api/user', {
           params: {
             masterUser: user.username
           }

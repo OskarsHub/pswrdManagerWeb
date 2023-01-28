@@ -19,7 +19,7 @@ export const AuthProvider = ({children}) => {
     const loginUser = async (e) => {
         e.preventDefault()
     
-        axios.post('https://localhost:3001/api/login', {
+        axios.post('https://pswrdmanagerwebbackend.fly.dev/api/login', {
           'username': e.target.username.value, 
           'password': e.target.password.value
         })
