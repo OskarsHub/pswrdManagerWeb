@@ -1,65 +1,78 @@
-body {
-    font-family: Arial, sans-serif;
-  }
-  
-  .password-manager-container {
-    width: 60%;
-    margin: 0 auto;
-  }
-
-  li {
-    border: 1px solid black;
-    padding: 10px;
-    margin: 10px;
-  }
-  
-  h1 {
-    margin-bottom: 1px;
-    text-align: center;
+.passwordContainer {
+    display: inline-block;
+    flex-direction: column;
+    margin-top: 3.5em;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 2em;
+    background-color: #171717;
+    border-radius: 25px;
+    width: 370px;
   }
 
-  h2 {
-    margin-top: 1px;
-    text-align: center;
-  }
-  
-  .password-list {
-    margin-top: 30px;
-  }
-  
-  .password-list ul {
+  .ulList {
     list-style-type: none;
-    padding: 0;
-    text-align: center;
+    margin-top: 2.5em;
+    padding: 1em;
+    color: white;
   }
-  
-  .password-list li {
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #f2f2f2;
-    border-radius: 20px;
+
+#heading1 {
+    margin: 1em;
+    color: rgb(0, 0, 0);
+    font-size: 2em;
   }
-  
-  .add-password-container {
-    text-align: center;
-    margin-top: 30px;
-  }
-  
-  .button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .button-container button {
-    margin-left: 10px;
-    padding: 10px 20px;
-    border-radius: 20px;
-    background-color: #ccc;
+
+#heading2 {
+    margin-top: -2em;
+    color: rgb(0, 0, 0);
+    font-size: 1.4em;
+}
+
+  .buttonAddPassword {
+    padding: 0.7em;
+    padding-left: 3.5em;
+    padding-right: 3.5em;
+    border-radius: 25px;
+    margin-right: 1.5em;
+    margin-top: 2em;
     border: none;
-    cursor: pointer;
+    outline: none;
+    transition: .2s ease-in-out;
+    background-color: #252525;
+    color: white;
   }
   
-  .button-container button:hover {
-    background-color: #e6e6e6;
+  .buttonAddPassword:hover {
+    background-color: black;
+    color: white;
+  }
+  
+  .buttonLogOut {
+    padding: 0.7em;
+    padding-left: 3.5em;
+    padding-right: 3.5em;
+    border-radius: 25px;
+    margin-left: 1.5em;
+    border: none;
+    outline: none;
+    transition: .2s ease-in-out;
+    background-color: #252525;
+    color: white;
+  }
+
+  .buttonLogOut:hover {
+    background-color: black;
+    color: white;
+  }
+
+  @media (max-width: 400px) {
+
+    .passwordContainer {
+      width: auto;
+      margin-top: 4em;
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+    
   }

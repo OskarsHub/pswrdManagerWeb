@@ -11,7 +11,7 @@ const decrypt = require('./controllers/encryption')
 app.use(express.json());
 app.use(cors({
     origin: 'https://pswrd-manager-web.vercel.app/'
-}))
+}));
 
 /**
  * Login
@@ -25,7 +25,8 @@ app.post('/api/login', (request, response) => {
         port: process.env.DBPORT,
         user: process.env.USER,
         password: process.env.PASSWORD,
-        database: process.env.DATABASE
+        database: process.env.DATABASE,
+        ssl: {'sslmode': 'require'}
     })
 
     let command = (`select * from "${username}"`)
@@ -71,30 +72,26 @@ app.post('/api/login', (request, response) => {
  */
 app.post('/api/signup', async (request, response) => {
 
-    console.log("pyyntö toimii")
-
     const {username, password} = request.body;
     const hashedPassword = await bcrypt.hash(password, 10); 
-
-    console.log(username)
-    console.log(password)
-    console.log(hashedPassword)
 
     const client = new Client({
         host: process.env.HOST,
         port: process.env.DBPORT,
         user: process.env.USER,
         password: process.env.PASSWORD,
-        database: process.env.DATABASE
+        database: process.env.DATABASE,
+        ssl: {'sslmode': 'require'}
     })
 
-    const createCommand = (`CREATE TABLE "${username}" (id serial PRIMARY KEY, service VARCHAR (50),username VARCHAR ( 50 ) NOT NULL, password VARCHAR ( 60 ) NOT NULL, iv VARCHAR (32));`)
+    const createCommand = (`CREATE TABLE "${username}" (id serial PRIMARY KEY, service VARCHAR (50),username VARCHAR ( 50 ) NOT NULL, password VARCHAR ( 64 ) NOT NULL, iv VARCHAR (32));`)
     const insertCommand = (`INSERT INTO "${username}" (id, service, username, password) VALUES (DEFAULT, 'DB', '${username}', '${hashedPassword}');`)
 
     /**
      * Connects to database and tires if username is reserved. If not, then adds new user to database
      */
     client.connect();
+    console.log(client)
     client.query(createCommand, (err) => {
     if(err) {
         console.log("Username is reserved")
@@ -125,7 +122,8 @@ app.get('/api/user', (request, response) => {
         port: process.env.DBPORT,
         user: process.env.USER,
         password: process.env.PASSWORD,
-        database: process.env.DATABASE
+        database: process.env.DATABASE,
+        ssl: {'sslmode': 'require'}
     })
 
     const command = (`SELECT * FROM "${masterUser}" WHERE id > 1;`)
@@ -190,7 +188,8 @@ app.post('/api/user', (request, response) => {
         port: process.env.DBPORT,
         user: process.env.USER,
         password: process.env.PASSWORD,
-        database: process.env.DATABASE
+        database: process.env.DATABASE, 
+        ssl: {'sslmode': 'require'}
     })
 
     const command = (`INSERT INTO "${masterUser}" (id, service, username, password, iv) VALUES (DEFAULT, '${service}', '${username}', '${ePassword.encryptedData}', '${ePassword.iv}');`)
@@ -200,6 +199,7 @@ app.post('/api/user', (request, response) => {
     client.connect();
     client.query(command, (err) => {
     if(err) {
+        console.log(err)
         console.log("Error")
         response.send('cannot add')
     }else{

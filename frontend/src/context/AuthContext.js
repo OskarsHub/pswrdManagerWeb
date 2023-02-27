@@ -25,7 +25,6 @@ export const AuthProvider = ({children}) => {
         })
         .then(res => {
           const response = res.data.Token;
-          console.log(response)
           if (response === undefined) {
             //If no username is found 
             alert("Incorrect username or password")

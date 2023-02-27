@@ -1,80 +1,71 @@
-.signup-container {
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+:root {
+    --c1:#f9deb3;
+    --c2:#295e82;
   }
   
-  .signup-container h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: linear-gradient(120deg, var(--c1) 0%, var(--c2) 100%);
+    text-align: center;
+  }
+
+.btnSignUp {
+    margin-top: 2em;
+}
+
+.buttonSignUp {
+    padding: 0.7em;
+    padding-left: 3.5em;
+    padding-right: 3.5em;
+    border-radius: 25px;
+    margin-right: 3em;
+    border: none;
+    outline: none;
+    transition: .2s ease-in-out;
+    background-color: #252525;
+    color: white;
+  }
+
+  .buttonSignUp:hover {
+    background-color: black;
+    color: white;
   }
   
-  .signup-container label {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  .buttonCancel {
+    padding: 0.7em;
+    padding-left: 3.5em;
+    padding-right: 3.5em;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    transition: .2s ease-in-out;
+    background-color: #252525;
+    color: white;
   }
   
-  .signup-container input {
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  margin-bottom: 1rem;
+  .buttonCancel:hover {
+    background-color: black;
+    color: white;
   }
-  
-  .signup-container button {
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  background-color: #ccc;
-  color: #fff;
-  font-size: 1.2rem;
-  margin-right: 1rem;
-  }
-  
-  .signup-container button:hover {
-  background-color: #999;
-  cursor: pointer;
-  }
-  
-  .signup-container button:active {
-  background-color: #666;
-  }
-  
-  .signup-container #username {
-  width: 20rem;
-  }
-  
-  .signup-container #password {
-  width: 20rem;
-  }
-  
-  .signup-container #password-again {
-  width: 20rem;
-  }
-  
-  .signup-container .button-row {
-  display: flex;
-  justify-content: space-between;
-  }
-  
-  .signup-container .button-row button:first-child {
-  margin-right: 1rem;
-  }
-  
-  .signup-container button:last-child {
-  margin-top: 1rem;
-  }
-  
-  /*
-  Move the Sign Up and Cancel button to the first row and the "Already have an account?" button to the second row
-  */
-  
-  .signup-container .button-row button:first-child,
-  .signup-container .button-row button:nth-child(2) {
-  margin-bottom: 1rem;
-  }
-  
-  .signup-container button:last-child {
-  margin-top: 0;
+
+  @media (max-width: 400px) {
+
+
+    .buttonSignUp {
+        padding-left: 2em;
+        padding-right: 2em;
+        border-radius: 25px;
+        margin-right: 1.5em;
+        margin-left: 1.8em;
+      }
+
+      .buttonCancel {
+        padding-left: 2em;
+        padding-right: 2em;
+        border-radius: 25px;
+        margin-right: 1.8em;
+        margin-left: 1.5em;
+      }
+    
   }

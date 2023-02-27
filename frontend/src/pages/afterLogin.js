@@ -34,24 +34,24 @@ const AfterLoginPage = () => {
     }
 
     return (
-    <div class="password-manager-container">
-      <h1>Welcome {user.username},</h1>
+    <div className="loggedIn">
+      <h1 id="heading1">Welcome {user.username},</h1>
       <br/>
-      <h2>here is your passwords</h2>
-      <div class="button-container">
-        <button type="button" onClick={togglePopup}>Add password</button> 
-        <button type="button" onClick={logoutUser}>Logout</button>
-      </div>Popup
-      <div class="password-list">
-      <ul>
+      <h2 id="heading2">here is your passwords</h2>
+      <div className="btn">
+        <button className="buttonAddPassword" type="button" onClick={togglePopup}>Add password</button> 
+        <button className="buttonLogOut" type="button" onClick={logoutUser}>Logout</button>
+      </div>
+      <div className="passwordContainer">
+      <ul className="ulList">
         {passwords.map((user) => {
           return (
-              <li>Service: {user.service} | Username: {user.username} | Password: {user.password}</li>
+              <li className="liList">Service: {user.service} <br/> Username: {user.username} <br/> Password: {user.password} <br/> ----------</li>
             )
           })}
       </ul>
       </div>
-      <div class="add-password-container">
+      <div className="add-password-container">
       {isOpen && <Popup
           handleClose={togglePopup}
           />}

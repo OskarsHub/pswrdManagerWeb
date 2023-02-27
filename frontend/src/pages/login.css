@@ -1,50 +1,104 @@
-.login-container {
-font-family: Arial, sans-serif;
-display: flex;
-flex-direction: column;
-align-items: center;
-text-align: center;
+:root {
+  --c1:#f9deb3;
+  --c2:#295e82;
 }
 
-.login-container h1 {
-font-size: 2rem;
-margin-bottom: 1rem;
+html, body {
+  margin: 0;
+  height: 100%;
+  background: linear-gradient(120deg, var(--c1) 0%, var(--c2) 100%);
+  text-align: center;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+  
+.form {
+    display: inline-block;
+    flex-direction: column;
+    margin-top: 10em;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 2em;
+    background-color: #171717;
+    border-radius: 25px;
+    width: 370px;
+  }
+  
+  #heading {
+    text-align: center;
+    margin: 2em;
+    color: rgb(255, 255, 255);
+    font-size: 2em;
+  }
+  
+  .field {
+    display: flex;
+    border-radius: 25px;
+    margin-bottom: 1em;
+    padding: .6em;
+    justify-content: center;
+    border: none;
+    outline: none;
+    color: white;
+    background-color: #171717;
+    box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+  }
+  
+  .input-field {
+    background: none;
+    border: none;
+    outline: none;
+    width: 100%;
+    color: #d3d3d3;
+  }
+  
+  .popup-content .btn {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin-top: 2.5em;
+    margin-bottom: 0.7em;
+  }
 
-.login-container label {
-font-size: 1.2rem;
-margin-bottom: 0.5rem;
-}
+  .button-container {
+    margin-top: -2em;
+  }
 
-.login-container input {
-padding: 0.5rem;
-border-radius: 0.5rem;
-border: none;
-margin-bottom: 1rem;
-}
+  .buttonLogin {
+    margin-top: .7em;
+    padding: 0.7em;
+    padding-left: 5em;
+    padding-right: 5em;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    transition: .2s ease-in-out;
+    background-color: #252525;
+    color: white;
+  }
+  
+  .buttonLogin:hover {
+    background-color: black;
+    color: white;
+  }
+  
+  .buttonNewAccount {
+    margin-top: 2em;
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    font-family: arial, sans-serif;
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 
-.login-container button {
-padding: 0.5rem 1rem;
-border-radius: 0.5rem;
-background-color: #ccc;
-color: #fff;
-font-size: 1.2rem;
-margin-right: 1rem;
-}
+  @media (max-width: 450px) {
 
-.login-container button:hover {
-background-color: #999;
-cursor: pointer;
-}
-
-.login-container button:active {
-background-color: #666;
-}
-
-.login-container #username {
-width: 20rem;
-}
-
-.login-container #password {
-width: 20rem;
-}
+    .form {
+      width: auto;
+      margin-top: 9em;
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+    
+  }

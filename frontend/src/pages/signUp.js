@@ -1,9 +1,17 @@
 import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import "./signUp.css"
   
 const SignUpPage = () => {
+
+  /**
+   * Setting body element background colors
+   */
+  document.documentElement.style.setProperty('--c1', '#f9deb3');
+  document.documentElement.style.setProperty('--c2', '#295e82');
+
 
     /**
      * Signup method.
@@ -58,23 +66,25 @@ const SignUpPage = () => {
     }
 
   return (
-  <div class="signup-container">
-    <h1>Sign Up</h1>
-      <label htmlFor="username">Username:</label>
-      <input type="text" id="username" placeholder="Enter your username"/>
-      <br/>
-      <label htmlFor="password">Password:</label>
-      <input type="password" id="password" placeholder="Enter your password"/>
-      <br/>
-      <label htmlFor="password-again">Password Again:</label>
-      <input type="password" id="password-again" placeholder="Enter your password again"/>
-      <br/>
-      <div className="button-row">
-      <button type="button" onClick={signup}>Sign Up</button>
-      <button type="button" onClick={ () => {changePage("/")} }>Cancel</button>
-      </div>
-      <button type="button" onClick={ () => {changePage("/login")} }>Already have an account?</button>
-  </div>
+    <motion.div className="form"
+      initial={{opacity: 0}}
+      animate={{opacity: 1}}
+    >
+    <p id="heading">Sign Up</p>
+    <div className="field">
+      <input autoComplete="off" placeholder="Username" id="username" className="input-field" type="text"/>
+    </div>
+    <div className="field">
+      <input autoComplete="new-password" placeholder="Password" id="password" className="input-field" type="password"/>
+    </div>
+    <div className="field">
+      <input autoComplete="new-password" placeholder="Password again" id="password-again" className="input-field" type="password"/>
+    </div>
+    <div className="btnSignUp">
+      <button className="buttonSignUp" onClick={signup}>Sign Up</button>
+      <button className="buttonCancel" onClick={ () => {changePage("/")} }>Cancel</button>
+    </div>
+    </motion.div>
   );
 };
   

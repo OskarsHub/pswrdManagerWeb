@@ -1,5 +1,6 @@
 import React, {useContext} from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 import AuthContext from "../context/AuthContext";
 import './Popup.css'
 
@@ -22,8 +23,6 @@ const Popup = props => {
           alert("You must fill everything")
           return
         }
-
-        console.log(service, username, password)
   
         axios.post('https://pswrdmanagerwebbackend.fly.dev/api/user', {
           masterUser: user.username,
@@ -37,7 +36,6 @@ const Popup = props => {
         })
         .then(res => {
           const response = res.data
-          console.log(response)
           if (response === 'logout'){
             //If backens sends logout, it means authtoken is expired. Beacuse that, logout user and send alarm
             logoutUser()
@@ -52,21 +50,27 @@ const Popup = props => {
       }
 
     return(
-      <div class="popup-container" id="add-password-popup">
-        <div class="popup-content">
-          <h2>Add Password</h2>
-          <label>Service:</label>
-          <input type="text" id="service-input" placeholder="Enter the service name"/>
-          <label>Username:</label>
-          <input type="text" id="username-input" placeholder="Enter your username"/>
-          <label>Password:</label>
-          <input type="password" id="password-input" placeholder="Enter your password"/>
-          <div class="button-container">
-            <button class="add-password-button" type="button" onClick={Add}>Add</button>
-            <button class="cancel-button"       type="button" onClick={props.handleClose}>Cancel</button>
+      <motion.div className="popup-container"
+      initial={{opacity: 0}}
+      animate={{opacity: 1}}
+      >
+        <div className="popup-content">
+          <h2 id="headingPopup">Add Password</h2>
+          <div className="field">
+            <input type="text" id="service-input" className="input-field" placeholder="Enter the service name" maxLength="22"/>
+          </div>
+          <div className="field">
+            <input type="text" id="username-input" className="input-field" placeholder="Enter username" maxLength="22"/>
+          </div>
+          <div className="field">
+          <input autoComplete="new-password" type="password" id="password-input" className="input-field" placeholder="Enter password" maxLength="22"/>
+          </div>
+          <div className="button-container">
+            <button className="buttonAddPassword" type="button" onClick={Add}>Add</button>
+            <button className="buttonCancelNewPassword" type="button" onClick={props.handleClose}>Cancel</button>
           </div>
       </div>
-    </div>
+    </motion.div>
     )
 }
 
