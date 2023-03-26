@@ -1,14 +1,17 @@
 # pswrdManagerWeb
-This is a simple password manager webpage that allows users to store and manage their passwords securely.
 
-## Technologies Used
+This is a simple password manager webpage that allows users to store their passwords securely.
 
-This project was built using:
+## Features
 
-    javaScript
-    CSS
-    React
-    Node.js
-    PostgreSQL
-    bcrypt
-    JSON Web Tokens
+    Frontend made with React.
+    Backend made with Node.js
+
+## Getting Started
+
+To get started with this project, follow these steps:
+
+    1. Clone the frontend to your local machine
+    2. Install the required dependencies using npm install
+    3. Start the development server using npm start
+    4. Open http://localhost:3000 in your web browser
